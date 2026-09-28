@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment for Screen Recording</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1a56db; --blue-dark:#0f3a9e; --blue-soft:#eaf1ff; --ink:#0f1e3d;
+  --muted:#5f6f8c; --line:#dbe4f5; --bg:#f4f8ff; --white:#fff;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Figtree',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;min-height:100vh}
+
+.top{
+  background:linear-gradient(160deg,var(--blue) 0%,var(--blue-dark) 100%);
+  color:#fff;padding:42px 20px 96px;text-align:center;
+}
+.top p{font-size:.95rem;opacity:.85}
+.top .amt{font-family:'Sora',sans-serif;font-size:3.6rem;font-weight:700;margin:6px 0 4px;letter-spacing:-1px}
+.top .words{font-size:.95rem;opacity:.9}
+
+.sheet{max-width:540px;margin:-64px auto 0;padding:0 16px 48px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 6px 24px rgba(26,86,219,.07)}
+.card h2{font-family:'Sora',sans-serif;font-size:1rem;font-weight:600;margin-bottom:12px}
+
+.line{display:flex;justify-content:space-between;gap:12px;padding:9px 0;color:var(--muted)}
+.line span:last-child{color:var(--ink);font-weight:500}
+.line.sum{border-top:1px solid var(--line);margin-top:6px;padding-top:14px;color:var(--ink);font-weight:600}
+.line.sum span:last-child{color:var(--blue);font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700}
+.for{background:var(--blue-soft);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.92rem;color:var(--blue-dark)}
+
+.frame{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.frame img{max-width:100%;border-radius:8px;display:none}
+.frame.loaded img{display:inline-block}
+.frame.loaded .ph{display:none}
+.ph{color:var(--muted);font-size:.9rem;padding:44px 10px}
+.pay{background:var(--blue-soft);border-radius:12px;padding:18px 16px;text-align:center;font-size:1.1rem;color:var(--blue-dark);word-break:break-word}
+
+.note{background:var(--blue-soft);border-radius:12px;padding:14px 16px;font-size:.95rem;color:var(--ink)}
+
+.btn{width:100%;margin-top:16px;padding:15px;border:0;border-radius:12px;cursor:pointer;
+  font:600 1rem 'Figtree',sans-serif;color:#fff;background:var(--blue);transition:background .15s}
+.btn:hover{background:var(--blue-dark)}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+#verifyBox{display:none;margin-top:16px}
+#verifyBox.open{display:block}
+label{display:block;font-size:.9rem;color:var(--muted);margin-bottom:6px}
+input{width:100%;padding:13px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:500 1rem 'Figtree',sans-serif}
+input:focus{border-color:var(--blue)}
+.err{color:#c62828;font-size:.85rem;margin-top:6px;min-height:1.2em}
+
+#done{display:none;text-align:center;margin-top:16px}
+#done.open{display:block}
+.tick{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;background:var(--blue);color:#fff;font-size:1.6rem}
+#done h3{font-family:'Sora',sans-serif;font-size:1.1rem}
+#done p{color:var(--muted);font-size:.93rem;margin-top:4px}
+#done code{color:var(--blue-dark);font-weight:600;word-break:break-all}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <p>Amount to pay</p>
+  <div class="amt">&#8377;84</div>
+  <div class="words">84 Rupees</div>
+</div>
+
+<main class="sheet">
+
+  <section class="card">
+    <h2>Payment calculation</h2>
+    <div class="line"><span>4 Round Garma Garmi</span><span>4 rounds</span></div>
+    <div class="line"><span>Rate per round</span><span>&#8377;21</span></div>
+    <div class="line sum"><span>4 &times; &#8377;21 =</span><span>&#8377;84</span></div>
+    <div class="for">Total to get the screen recording of Jaat and my conversation.</div>
+  </section>
+
+  <section class="card">
+    <h2>Payment details</h2>
+    <p class="pay"><b>Pay 84 Rs on 9565388238@paytm to get the access</b></p>
+  </section>
+
+  <section class="card">
+    <h2>Our conversation (proof)</h2>
+    <div class="frame" id="proof">
+      <img id="proofImg" alt="Screenshot of our conversation">
+      <div class="ph">Conversation screenshot will appear here</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>After you pay</h2>
+    <div class="note">Once payment is done, click <b>Verify</b>, then enter your <b>Transaction ID</b>. That's it.</div>
+    <button class="btn" id="verifyBtn">Verify</button>
+
+    <div id="verifyBox">
+      <label for="txn">Transaction ID</label>
+      <input id="txn" type="text" placeholder="Enter your transaction ID" autocomplete="off">
+      <div class="err" id="err" role="alert"></div>
+      <button class="btn" id="submitBtn" style="margin-top:6px">Submit</button>
+    </div>
+
+    <div id="done">
+      <div class="tick">&#10003;</div>
+      <h3>Done</h3>
+      <p>Transaction ID <code id="shownId"></code> received.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ============ PASTE YOUR LINKS HERE ============ */
+const PROOF_IMAGE_URL  = "https://i.ibb.co/GQMjJc9r/Screenshot-2026-09-28-19-54-36-14-572064f74bd5f9fa804b05334aa4f912.webp";  // paste your conversation screenshot link between the quotes
+
+/* Optional: WhatsApp number with country code, no + or spaces (e.g. "919876543210").
+   If filled, WhatsApp opens with the transaction ID ready to send to you. */
+const WHATSAPP_NUMBER  = "";
+/* ================================================ */
+
+function loadImg(url, imgId, frameId){
+  if(!url) return;
+  const img = document.getElementById(imgId);
+  img.onload  = () => document.getElementById(frameId).classList.add('loaded');
+  img.onerror = () => { document.querySelector('#'+frameId+' .ph').textContent = 'Image could not load. Check the link.'; };
+  img.src = url;
+}
+loadImg(PROOF_IMAGE_URL,'proofImg','proof');
+
+const box = document.getElementById('verifyBox');
+document.getElementById('verifyBtn').onclick = () => {
+  box.classList.add('open');
+  document.getElementById('txn').focus();
+};
+
+function submitTxn(){
+  const id = document.getElementById('txn').value.trim();
+  const err = document.getElementById('err');
+  if(id.length < 8 || !/^[A-Za-z0-9]+$/.test(id)){
+    err.textContent = 'Enter a valid transaction ID (letters and numbers, at least 8 characters).';
+    return;
+  }
+  err.textContent = '';
+  document.getElementById('shownId').textContent = id;
+  box.classList.remove('open');
+  document.getElementById('verifyBtn').style.display = 'none';
+  document.getElementById('done').classList.add('open');
+  if(WHATSAPP_NUMBER){
+    const msg = encodeURIComponent('Payment done: Rs 84 for screen recording. Transaction ID: ' + id);
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
+  }
+}
+document.getElementById('submitBtn').onclick = submitTxn;
+document.getElementById('txn').addEventListener('keydown', e => { if(e.key === 'Enter') submitTxn(); });
+</script>
+</body>
+</html>
